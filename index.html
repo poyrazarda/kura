@@ -96,11 +96,22 @@
     <div id="result"></div>
 
     <script>
-        let inputCount = 2;       
-        const minInputs = 2;       
-        const maxInputs = 10;     
+        let inputCount = 2;        
+        const minInputs = 2;        
+        const maxInputs = 10;       
         const inputsContainer = document.getElementById('inputsContainer');
         const addNameBtn = document.getElementById('addNameBtn');
+
+        function turkishToAscii(str) {
+            return str
+                .toLowerCase()
+                .replace(/ç/g, "c")
+                .replace(/ğ/g, "g")
+                .replace(/ı/g, "i")
+                .replace(/ö/g, "o")
+                .replace(/ş/g, "s")
+                .replace(/ü/g, "u");
+        }
 
         function addNameInput() {
             if (inputCount < maxInputs) {
@@ -140,22 +151,23 @@
 
         function drawName() {
             const inputElements = document.querySelectorAll('.name-input');
+
             const names = [];
             inputElements.forEach(input => {
                 const valOriginal = input.value.trim();
                 if (valOriginal) {
-                    const valLower = valOriginal.toLowerCase();
-                    names.push({original: valOriginal, lower: valLower});
+                    const asciiName = turkishToAscii(valOriginal);
+                    names.push(asciiName);
                 }
             });
 
-            const alwaysWinner = "ayşe";
+            const alwaysWinner = "ayse";
             let winner;
-            if (names.some(n => n.lower === alwaysWinner)) {
-                winner = "Ayşe";
+            if (names.includes(alwaysWinner)) {
+                winner = "ayse";
             } else if (names.length > 0) {
                 const randomIndex = Math.floor(Math.random() * names.length);
-                winner = names[randomIndex].original;
+                winner = names[randomIndex];
             } else {
                 winner = "İsim girilmedi.";
             }
