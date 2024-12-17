@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Çekiliş Uygulaması</title>
+<style>
+    body {
+        font-family: Arial, sans-serif; 
+        margin: 20px; 
+        background: #f7f7f7;
+    }
+    h1 {
+        text-align: center;
+    }
+    .input-container {
+        display: flex; 
+        flex-direction: column; 
+        max-width: 300px; 
+        margin: 0 auto;
+    }
+    .name-row {
+        display: flex;
+        align-items: center;
+        margin: 5px 0;
+    }
+    .name-row input[type="text"] {
+        flex: 1;
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+    .remove-btn {
+        margin-left: 10px;
+        background: #dc3545;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 6px 10px;
+    }
+    .remove-btn:hover {
+        background: #c82333;
+    }
+    .buttons-container {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .buttons-container button {
+        margin: 0 10px;
+        padding: 10px 20px;
+        border-radius: 4px; 
+        border: none;
+        color: #fff; 
+        font-size: 16px; 
+        cursor: pointer;
+    }
+    #addNameBtn {
+        background: #007bff;
+    }
+    #addNameBtn:hover:enabled {
+        background: #0069d9;
+    }
+    #addNameBtn:disabled {
+        background: #cccccc;
+        cursor: not-allowed;
+    }
+    #drawBtn {
+        background: #28a745;
+    }
+    #drawBtn:hover {
+        background: #218838;
+    }
+    #result {
+        text-align: center; 
+        font-size: 20px; 
+        margin-top: 30px; 
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+    <h1>Çekiliş Uygulaması</h1>
+    <div class="input-container" id="inputsContainer">
+        <div class="name-row">
+            <input type="text" class="name-input" placeholder="İsim 1" />
+        </div>
+        <div class="name-row">
+            <input type="text" class="name-input" placeholder="İsim 2" />
+        </div>
+    </div>
+    <div class="buttons-container">
+        <button id="addNameBtn" onclick="addNameInput()">Başka İsim Ekle</button>
+        <button id="drawBtn" onclick="drawName()">Çekiliş Yap</button>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        let inputCount = 2;         // Başlangıçta 2 kutu var
+        const minInputs = 2;        // En az 2 kutu
+        const maxInputs = 10;       // En fazla 10 kutu
+        const inputsContainer = document.getElementById('inputsContainer');
+        const addNameBtn = document.getElementById('addNameBtn');
+
+        function addNameInput() {
+            if (inputCount < maxInputs) {
+                const row = document.createElement('div');
+                row.className = 'name-row';
+
+                const newInput = document.createElement('input');
+                newInput.type = 'text';
+                newInput.className = 'name-input';
+                newInput.placeholder = 'Ek İsim';
+
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-btn';
+                removeBtn.textContent = 'Sil';
+                removeBtn.onclick = () => removeNameInput(row);
+
+                row.appendChild(newInput);
+                row.appendChild(removeBtn);
+                inputsContainer.appendChild(row);
+
+                inputCount++;
+                checkButtonsState();
+            }
+        }
+
+        function removeNameInput(rowElement) {
+            if (inputCount > minInputs) {
+                inputsContainer.removeChild(rowElement);
+                inputCount--;
+                checkButtonsState();
+            }
+        }
+
+        function checkButtonsState() {
+            addNameBtn.disabled = inputCount >= maxInputs;
+        }
+
+        function drawName() {
+            const inputElements = document.querySelectorAll('.name-input');
+            
+            // İsimleri orijinal ve küçük harfli olmak üzere saklıyoruz
+            const names = [];
+            inputElements.forEach(input => {
+                const valOriginal = input.value.trim();
+                if (valOriginal) {
+                    const valLower = valOriginal.toLowerCase();
+                    names.push({original: valOriginal, lower: valLower});
+                }
+            });
+
+            const alwaysWinner = "ayşe";
+            let winner;
+            if (names.some(n => n.lower === alwaysWinner)) {
+                // "ayşe" varsa kazanan daima "Ayşe"
+                winner = "Ayşe";
+            } else if (names.length > 0) {
+                // Rastgele bir kazanan seç, orijinal haliyle göster
+                const randomIndex = Math.floor(Math.random() * names.length);
+                winner = names[randomIndex].original;
+            } else {
+                // Hiç isim girilmemiş
+                winner = "İsim girilmedi.";
+            }
+
+            document.getElementById('result').textContent = "Kazanan: " + winner;
+        }
+    </script>
+</body>
+</html>
