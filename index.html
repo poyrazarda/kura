@@ -96,9 +96,9 @@
     <div id="result"></div>
 
     <script>
-        let inputCount = 2;         // Başlangıçta 2 kutu var
-        const minInputs = 2;        // En az 2 kutu
-        const maxInputs = 10;       // En fazla 10 kutu
+        let inputCount = 2;       
+        const minInputs = 2;       
+        const maxInputs = 10;     
         const inputsContainer = document.getElementById('inputsContainer');
         const addNameBtn = document.getElementById('addNameBtn');
 
@@ -140,8 +140,6 @@
 
         function drawName() {
             const inputElements = document.querySelectorAll('.name-input');
-            
-            // İsimleri orijinal ve küçük harfli olmak üzere saklıyoruz
             const names = [];
             inputElements.forEach(input => {
                 const valOriginal = input.value.trim();
@@ -154,14 +152,11 @@
             const alwaysWinner = "ayşe";
             let winner;
             if (names.some(n => n.lower === alwaysWinner)) {
-                // "ayşe" varsa kazanan daima "Ayşe"
                 winner = "Ayşe";
             } else if (names.length > 0) {
-                // Rastgele bir kazanan seç, orijinal haliyle göster
                 const randomIndex = Math.floor(Math.random() * names.length);
                 winner = names[randomIndex].original;
             } else {
-                // Hiç isim girilmemiş
                 winner = "İsim girilmedi.";
             }
 
